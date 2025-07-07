@@ -1,0 +1,14 @@
+digraph G {
+"body" -> "body_foot"[label="Broadcaster: /tf_pub_1\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1751808167.806 sec old)\nBuffer length: 0.000 sec\n"];
+"camera_init" -> "body"[label="Broadcaster: /laserMapping\nAverage rate: 10.201 Hz\nMost recent transform: 1751808167.750 ( 0.056 sec old)\nBuffer length: 4.901 sec\n"];
+"camera_init" -> "robot_foot_init"[label="Broadcaster: /tf_pub_2\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1751808167.806 sec old)\nBuffer length: 0.000 sec\n"];
+"map" -> "body_2d"[label="Broadcaster: /trans_tF_2d\nAverage rate: 1.250 Hz\nMost recent transform: 1751808166.856 ( 0.950 sec old)\nBuffer length: 4.001 sec\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1751808167.806"[ shape=plaintext ] ;
+ }->"camera_init";
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1751808167.806"[ shape=plaintext ] ;
+ }->"map";
+}

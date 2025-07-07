@@ -1,0 +1,31 @@
+# Path Following Controller Parameters
+
+path_following_controller:
+  # Control parameters
+  lookahead_distance: 2.0      # Distance to look ahead on the path (meters)
+  waypoint_tolerance: 0.5      # Tolerance for reaching waypoints (meters)
+  max_velocity: 2.0            # Maximum velocity (m/s)
+  max_acceleration: 1.0        # Maximum acceleration (m/s²)
+  max_jerk: 2.0                # Maximum jerk (m/s³)
+  control_frequency: 50.0      # Control loop frequency (Hz)
+  fixed_height: 1.5            # Fixed flight height (meters)
+  
+  # Control gains
+  yaw_gain: 1.0                # Yaw control gain
+  position_gain: 1.0           # Position control gain
+  velocity_gain: 0.5           # Velocity control gain
+  
+  # Safety parameters
+  emergency_stop_timeout: 1.0  # Emergency stop timeout (seconds)
+  max_path_age: 5.0            # Maximum age of path before stopping (seconds)
+  smoothing_factor: 0.1        # Trajectory smoothing factor (0-1)
+  
+  # Advanced parameters
+  min_velocity: 0.1            # Minimum velocity (m/s)
+  velocity_ramp_time: 1.0      # Time to ramp up/down velocity (seconds)
+  yaw_rate_limit: 1.0          # Maximum yaw rate (rad/s)
+  
+  # Path following parameters
+  path_smoothing: true         # Enable path smoothing
+  adaptive_lookahead: true     # Enable adaptive lookahead distance
+  goal_tolerance: 0.2          # Final goal tolerance (meters) 

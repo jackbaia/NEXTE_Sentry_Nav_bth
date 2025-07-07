@@ -1,0 +1,25 @@
+# Navigation Converter Parameters
+# This file contains parameters for the cmd_vel_to_position converter
+
+# Velocity limits
+max_velocity: 2.0          # Maximum velocity in m/s
+max_acceleration: 1.0      # Maximum acceleration in m/s²
+max_yaw_rate: 1.0          # Maximum yaw rate in rad/s
+
+# Tolerance parameters
+position_tolerance: 0.1    # Position tolerance in meters
+yaw_tolerance: 0.1         # Yaw tolerance in radians
+
+# Control parameters
+control_frequency: 50.0    # Control loop frequency in Hz
+
+# Integration parameters
+integration_timeout: 1.0   # Timeout for velocity commands in seconds
+max_integration_dt: 0.1    # Maximum integration time step in seconds
+
+# Safety parameters
+enable_safety_checks: true # Enable safety checks
+emergency_stop_timeout: 0.5 # Emergency stop timeout in seconds
+
+# Fixed height for drone (meters)
+fixed_height: 1.5 

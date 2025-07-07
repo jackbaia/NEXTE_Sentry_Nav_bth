@@ -1,0 +1,14 @@
+<launch>
+    <!-- Load parameters -->
+    <rosparam file="$(find nav_converter)/param/converter_params.yaml" command="load"/>
+    
+    <!-- Launch the cmd_vel to position converter -->
+    <node name="cmd_vel_to_position" type="cmd_vel_to_position" pkg="nav_converter" output="screen">
+        <!-- Override parameters if needed -->
+        <!-- <param name="max_velocity" value="1.5"/> -->
+        <!-- <param name="control_frequency" value="100.0"/> -->
+    </node>
+    
+    <!-- Optional: Launch rqt_plot for debugging -->
+    <!-- <node name="rqt_plot" type="rqt_plot" pkg="rqt_plot" args="/cmd_vel/linear/x /cmd/position/x"/> -->
+</launch> 

@@ -1,0 +1,28 @@
+<launch>
+    <!-- Path Following Controller Node -->
+    <node pkg="nav_converter" type="path_following_controller" name="path_following_controller" output="screen">
+        <!-- Topic remapping -->
+        <remap from="global_path" to="/move_base1/NavfnROS/plan" />
+        <remap from="odom" to="/Odometry" />
+        <remap from="cmd" to="/position_cmd" />
+        
+        <!-- Control parameters -->
+        <param name="lookahead_distance" value="2.0" />
+        <param name="waypoint_tolerance" value="0.5" />
+        <param name="max_velocity" value="2.0" />
+        <param name="max_acceleration" value="1.0" />
+        <param name="max_jerk" value="2.0" />
+        <param name="control_frequency" value="50.0" />
+        <param name="fixed_height" value="1.5" />
+        
+        <!-- Control gains -->
+        <param name="yaw_gain" value="1.0" />
+        <param name="position_gain" value="1.0" />
+        <param name="velocity_gain" value="0.5" />
+        
+        <!-- Safety parameters -->
+        <param name="emergency_stop_timeout" value="1.0" />
+        <param name="max_path_age" value="5.0" />
+        <param name="smoothing_factor" value="0.1" />
+    </node>
+</launch> 
