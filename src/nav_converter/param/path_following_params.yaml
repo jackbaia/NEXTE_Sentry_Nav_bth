@@ -1,4 +1,4 @@
-# Path Following Controller Parameters
+# Path Following Controller Parameters - 针对RK3588优化
 
 path_following_controller:
   # Control parameters
@@ -7,7 +7,7 @@ path_following_controller:
   max_velocity: 2.0            # Maximum velocity (m/s)
   max_acceleration: 1.0        # Maximum acceleration (m/s²)
   max_jerk: 2.0                # Maximum jerk (m/s³)
-  control_frequency: 50.0      # Control loop frequency (Hz)
+  control_frequency: 30.0      # Control loop frequency - 从50Hz降低到30Hz，适合RK3588
   fixed_height: 1.5            # Fixed flight height (meters)
   
   # Control gains

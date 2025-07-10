@@ -10,8 +10,8 @@ max_yaw_rate: 1.0          # Maximum yaw rate in rad/s
 position_tolerance: 0.1    # Position tolerance in meters
 yaw_tolerance: 0.1         # Yaw tolerance in radians
 
-# Control parameters
-control_frequency: 50.0    # Control loop frequency in Hz
+# Control parameters - 针对RK3588优化
+control_frequency: 30.0    # Control loop frequency - 从50Hz降低到30Hz，适合RK3588性能
 
 # Integration parameters
 integration_timeout: 1.0   # Timeout for velocity commands in seconds
