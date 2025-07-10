@@ -1,17 +1,17 @@
 # Navigation Converter Parameters
 # This file contains parameters for the cmd_vel_to_position converter
 
-# Velocity limits
-max_velocity: 2.0          # Maximum velocity in m/s
-max_acceleration: 1.0      # Maximum acceleration in m/s²
-max_yaw_rate: 1.0          # Maximum yaw rate in rad/s
+# Velocity limits - 提高机动性
+max_velocity: 3.0          # Maximum velocity - 从2.0增加到3.0，提高机动性
+max_acceleration: 2.0      # Maximum acceleration - 从1.0增加到2.0，提高响应性
+max_yaw_rate: 2.0          # Maximum yaw rate - 从1.0增加到2.0，提高转向能力
 
 # Tolerance parameters
 position_tolerance: 0.1    # Position tolerance in meters
 yaw_tolerance: 0.1         # Yaw tolerance in radians
 
-# Control parameters - 针对RK3588优化
-control_frequency: 30.0    # Control loop frequency - 从50Hz降低到30Hz，适合RK3588性能
+# Control parameters - 提高控制频率
+control_frequency: 50.0    # Control loop frequency - 从30Hz提高到50Hz，提高控制精度
 
 # Integration parameters
 integration_timeout: 1.0   # Timeout for velocity commands in seconds

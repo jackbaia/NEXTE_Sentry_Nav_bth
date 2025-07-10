@@ -3,12 +3,12 @@ local_costmap:
   # global_frame: camera_init #里程计坐标系
   robot_base_frame: body_foot #机器人坐标系
  
-  update_frequency: 8.0 #代价地图更新频率 - 从10Hz降低到8Hz，适合RK3588
-  publish_frequency: 8.0 #代价地图的发布频率 - 从10Hz降低到8Hz
+  update_frequency: 15.0 #代价地图更新频率 - 从8Hz提高到15Hz，提高响应速度
+  publish_frequency: 15.0 #代价地图的发布频率 - 从8Hz提高到15Hz，提高响应速度
   transform_tolerance: 2 #等待坐标变换发布信息的超时时间
  
   static_map: false  #不需要静态地图，可以提升导航效果
   rolling_window: true #是否使用动态窗口，默认为false，在静态的全局地图中，地图不会变化
-  width: 3 # 局部地图宽度 - 从4m降低到3m，减少计算量
-  height: 3 # 局部地图高度 - 从4m降低到3m，减少计算量
-  resolution: 0.1 # 局部地图分辨率 - 从0.05增加到0.1，降低精度提高性能
+  width: 4 # 局部地图宽度 - 从3m增加到4m，扩大检测范围
+  height: 4 # 局部地图高度 - 从3m增加到4m，扩大检测范围
+  resolution: 0.05 # 局部地图分辨率 - 从0.1降低到0.05，提高精度
