@@ -1,0 +1,65 @@
+# 隧道环境路径控制器参数配置
+# 针对隧道环境优化的保守控制参数
+
+# 基础控制参数
+lookahead_distance: 1.5          # 前瞻距离 (m) - 隧道环境需要更小
+waypoint_tolerance: 0.3          # 航点容差 (m) - 更精确的跟踪
+max_velocity: 1.5                # 最大速度 (m/s) - 降低速度确保安全
+max_acceleration: 0.8            # 最大加速度 (m/s²) - 更平滑的运动
+max_jerk: 1.5                    # 最大加加速度 (m/s³)
+control_frequency: 50.0          # 控制频率 (Hz)
+fixed_height: 1.2                # 固定飞行高度 (m) - 隧道中线偏下
+
+# 控制增益
+yaw_gain: 0.8                    # 偏航角增益 - 降低避免震荡
+position_gain: 0.8               # 位置增益 - 更保守的控制
+velocity_gain: 0.4               # 速度增益 - 降低速度响应
+
+# 安全参数
+emergency_stop_timeout: 0.5      # 紧急停止超时 (s) - 更快的响应
+max_path_age: 3.0                # 路径最大有效期 (s) - 更短的路径有效期
+
+# 自适应前瞻距离
+adaptive_lookahead: true         # 启用自适应前瞻距离
+min_lookahead: 0.8               # 最小前瞻距离 (m)
+max_lookahead: 3.0               # 最大前瞻距离 (m)
+velocity_lookahead_factor: 0.3   # 速度前瞻因子 - 更保守
+
+# 隧道环境特殊参数
+tunnel_width_estimate: 2.0       # 隧道宽度估计 (m)
+lateral_safety_margin: 0.3       # 横向安全边距 (m)
+vertical_safety_margin: 0.2      # 垂直安全边距 (m)
+enable_tunnel_centering: true    # 启用隧道中心化
+
+# 路径平滑参数
+smoothing_weight: 0.05           # 平滑权重 - 更小的平滑
+smoothing_iterations: 20         # 平滑迭代次数 - 更多迭代
+max_curvature: 0.5               # 最大曲率限制
+
+# 安全监控参数
+min_safe_distance: 0.5           # 最小安全距离 (m)
+max_safe_distance: 3.0           # 最大安全距离 (m)
+emergency_stop_distance: 0.3     # 紧急停止距离 (m)
+
+# 高级隧道参数
+enable_curvature_adaptive_smoothing: true  # 启用曲率自适应平滑
+enable_tunnel_center_tracking: true        # 启用隧道中心跟踪
+tunnel_center_tolerance: 0.2               # 隧道中心容差 (m)
+
+# PID控制器参数 - 隧道环境更保守
+# 位置PID (kp, ki, kd, integral_limit, output_limit)
+x_pid: [0.8, 0.05, 0.1, 0.5, 1.5]
+y_pid: [0.8, 0.05, 0.1, 0.5, 1.5]
+z_pid: [0.8, 0.05, 0.1, 0.5, 1.5]
+
+# 速度PID
+vx_pid: [0.3, 0.0, 0.15, 0.3, 0.8]
+vy_pid: [0.3, 0.0, 0.15, 0.3, 0.8]
+vz_pid: [0.3, 0.0, 0.15, 0.3, 0.8]
+
+# 偏航角PID
+yaw_pid: [0.6, 0.0, 0.15, 0.3, 0.8]
+
+# 误差阈值参数
+error_threshold: 0.1             # PID积分误差阈值
+derivative_limit: 2.0            # 微分项限幅 
