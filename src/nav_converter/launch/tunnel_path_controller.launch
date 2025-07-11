@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- 隧道环境路径控制器 -->
+  <node name="tunnel_path_controller" pkg="nav_converter" type="tunnel_path_controller" output="screen">
+    <!-- 加载隧道环境参数 -->
+    <rosparam file="$(find nav_converter)/param/tunnel_controller_params.yaml" command="load" />
+    
+    <!-- 话题重映射 -->
+    <remap from="global_path" to="/move_base/NavfnROS/plan" />
+    <remap from="odom" to="/mavros/local_position/odom" />
+    <remap from="cmd_vel" to="/cmd_vel" />
+    <remap from="laser_scan" to="/scan" />
+    <remap from="cmd" to="/mavros/setpoint_raw/local" />
+    <remap from="current_path" to="/tunnel/current_path" />
+    <remap from="debug_info" to="/tunnel/debug_info" />
+    <remap from="safety_status" to="/tunnel/safety_status" />
+  </node>
+
+  <!-- 可选的RViz配置 -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find nav_converter)/rviz/tunnel_controller.rviz" if="$(arg rviz)" />
+  
+  <!-- 参数 -->
+  <arg name="rviz" default="false" />
+</launch> 
