@@ -1,0 +1,41 @@
+<launch>
+<!-- Launch file for Livox AVIA LiDAR - 快速建图版本 -->
+
+	<arg name="rviz" default="false" />  <!-- 关闭RViz以节省资源 -->
+	<arg name="use_sim_time" value="true"/>
+	<arg name="map" default="/home/bob/mid_ros/src/FAST_LIO/PCD/scans.pcd" />
+
+	<!-- fast_lio - 快速建图参数 -->
+	<rosparam command="load" file="$(find fast_lio)/config/mid360.yaml" />
+	<param name="feature_extract_enable" type="bool" value="0"/>
+	<param name="point_filter_num" type="int" value="8"/>  <!-- 大幅增加过滤 -->
+	<param name="max_iteration" type="int" value="1" />    <!-- 减少到1次迭代 -->
+	<param name="filter_size_surf" type="double" value="1.2" />  <!-- 增加过滤尺寸 -->
+	<param name="filter_size_map" type="double" value="1.2" />   <!-- 增加过滤尺寸 -->
+	<param name="cube_side_length" type="double" value="2000" /> <!-- 适中的地图大小 -->
+	<param name="runtime_pos_log_enable" type="bool" value="0" />
+    <node pkg="fast_lio" type="fastlio_mapping" name="laserMapping" output="screen" /> 
+
+	<group if="$(arg rviz)">
+	<node launch-prefix="nice" pkg="rviz" type="rviz" name="rviz" args="-d $(find fast_lio_localization)/rviz_cfg/sentry_build_map.rviz" />
+	</group>
+
+	<!-- build 2d map - 快速版本 -->
+	<include file="$(find fast_lio)/launch/Pointcloud2Map_fast.launch">
+	</include>
+
+	<!-- pointscloud2 to laserscans - 快速版本 -->
+	<include file="$(find fast_lio_localization)/launch/PointsCloud2toLaserscan.launch">
+	</include>
+
+	<!-- 发布一个雷达body到机器人足端body_foot的静态映射 -->
+	<node pkg="tf2_ros" type="static_transform_publisher" name="tf_pub_1" args="-0.0 -0.0 0 0 0 0 body body_foot" />
+	<!-- 发布一个雷达初始位置camera_init到机器人足端初始位置body_init的静态映射 -->
+	<node pkg="tf2_ros" type="static_transform_publisher" name="tf_pub_2" args="-0.0 -0.0 0 0 0 0 camera_init robot_foot_init" />
+
+	<!-- 快速建图优化参数 -->
+	<param name="octomap_server/resolution" value="0.3" />  <!-- 大幅降低分辨率 -->
+	<param name="octomap_server/pointcloud_max_z" value="2.0" />
+	<param name="octomap_server/pointcloud_min_z" value="-0.5" />
+
+</launch> 
