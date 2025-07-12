@@ -1,0 +1,53 @@
+<launch>
+    <!-- Mathematical Navigation Node -->
+    <node name="mathematical_navigation" pkg="nav_converter" type="mathematical_navigation_node" output="screen">
+        
+        <!-- 优化权重参数 -->
+        <param name="goal_distance_weight" value="1.0" />
+        <param name="path_following_weight" value="0.8" />
+        <param name="obstacle_avoidance_weight" value="1.2" />
+        <param name="smoothness_weight" value="0.6" />
+        <param name="energy_efficiency_weight" value="0.4" />
+        <param name="safety_weight" value="1.5" />
+        <param name="time_efficiency_weight" value="0.7" />
+        
+        <!-- 自适应控制参数 -->
+        <param name="learning_rate" value="0.01" />
+        <param name="forgetting_factor" value="0.95" />
+        <param name="adaptation_threshold" value="0.1" />
+        <param name="adaptation_window" value="50" />
+        <param name="min_confidence" value="0.3" />
+        <param name="max_confidence" value="0.9" />
+        
+        <!-- 动态障碍物预测参数 -->
+        <param name="prediction_horizon" value="3.0" />
+        <param name="prediction_step" value="0.1" />
+        <param name="velocity_uncertainty" value="0.2" />
+        <param name="position_uncertainty" value="0.1" />
+        <param name="collision_threshold" value="0.5" />
+        <param name="safety_margin" value="0.3" />
+        
+        <!-- 路径优化参数 -->
+        <param name="smoothing_factor" value="0.8" />
+        <param name="curvature_weight" value="0.5" />
+        <param name="length_weight" value="0.3" />
+        <param name="optimization_iterations" value="10" />
+        <param name="convergence_threshold" value="0.0001" />
+        
+        <!-- 控制参数 -->
+        <param name="max_velocity" value="0.8" />
+        <param name="max_acceleration" value="1.0" />
+        <param name="max_angular_velocity" value="1.0" />
+        <param name="control_frequency" value="20.0" />
+        <param name="goal_tolerance" value="0.2" />
+        <param name="path_tolerance" value="0.3" />
+        
+    </node>
+    
+    <!-- RViz for visualization (optional) -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find nav_converter)/rviz/mathematical_navigation.rviz" if="$(arg rviz)" />
+    
+    <!-- Launch arguments -->
+    <arg name="rviz" default="false" />
+    
+</launch> 

@@ -73,11 +73,13 @@ include_directories(
 add_executable(cmd_vel_to_position src/cmd_vel_to_position.cpp)
 add_executable(path_following_controller src/path_following_controller.cpp)
 add_executable(advanced_path_controller src/advanced_path_controller.cpp)
+add_executable(mathematical_navigation_node src/mathematical_navigation_node.cpp src/mathematical_navigation.cpp)
 
 ## Add cmake target dependencies of the executable
 add_dependencies(cmd_vel_to_position ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp)
 add_dependencies(path_following_controller ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp)
 add_dependencies(advanced_path_controller ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp)
+add_dependencies(mathematical_navigation_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(cmd_vel_to_position
@@ -89,13 +91,16 @@ target_link_libraries(path_following_controller
 target_link_libraries(advanced_path_controller
   ${catkin_LIBRARIES}
 )
+target_link_libraries(mathematical_navigation_node
+  ${catkin_LIBRARIES}
+)
 
 #############
 ## Install ##
 #############
 
 ## Mark executables for installation
-install(TARGETS cmd_vel_to_position path_following_controller advanced_path_controller
+install(TARGETS cmd_vel_to_position path_following_controller advanced_path_controller mathematical_navigation_node
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
@@ -103,6 +108,7 @@ install(TARGETS cmd_vel_to_position path_following_controller advanced_path_cont
 install(FILES
   launch/nav_converter.launch
   launch/path_following_controller.launch
+  launch/mathematical_navigation.launch
   param/converter_params.yaml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
