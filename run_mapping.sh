@@ -15,23 +15,29 @@ echo "==== 1. 启动建图流程 ===="
 roslaunch src/livox_ros_driver2/launch_ROS1/msg_MID360.launch &
 LIVOX_PID=$!
 sleep 2
-# 启动FAST_LIO建图
-roslaunch src/FAST_LIO_LOCALIZATION/launch/sentry_build_map.launch &
+# 启动FAST_LIO建图（禁用内置RViz）
+roslaunch src/FAST_LIO_LOCALIZATION/launch/sentry_build_map.launch rviz:=false &
 FASTLIO_PID=$!
 sleep 2
-# 处理rviz配置文件参数，未指定则用默认配置
-if [ -z "$RVIZ_CFG" ]; then
-  RVIZ_CFG="src/FAST_LIO/rviz_cfg/loam_livox.rviz"
-fi
-# 启动rviz
-rviz -d "$RVIZ_CFG" &
-RVIZ_PID=$!
-# 等待rviz关闭
-wait $RVIZ_PID
-# rviz关闭后立即保存地图
-echo "检测到rviz已关闭，自动保存地图..."
-rosrun map_server map_saver -f "$MAP_PATH"
-# 保存后kill建图相关节点
-kill $LIVOX_PID $FASTLIO_PID
+# 启动FAST_LIO三维建图（禁用内置RViz）
+roslaunch src/FAST_LIO/launch/mapping_mid360.launch rviz:=false &
+FASTLIO_3D_PID=$!
+sleep 2
 
-echo "建图流程完成，地图已保存到: $MAP_PATH" 
+# 手动启动两个独立的RViz窗口
+echo "启动第一个RViz窗口（二维建图）..."
+gnome-terminal --tab --title="2D Mapping RViz" -- bash -c "rviz -d src/FAST_LIO_LOCALIZATION/rviz_cfg/sentry_build_map.rviz; exec bash" &
+RVIZ_2D_PID=$!
+sleep 1
+
+echo "启动第二个RViz窗口（三维建图）..."
+gnome-terminal --tab --title="3D Mapping RViz" -- bash -c "rviz -d src/FAST_LIO/rviz_cfg/loam_livox.rviz; exec bash" &
+RVIZ_3D_PID=$!
+
+echo "建图流程已启动，请手动保存地图"
+echo "使用命令: rosrun map_server map_saver -f $MAP_PATH"
+echo "按 Ctrl+C 停止所有节点"
+
+# 等待用户中断
+trap 'echo "正在停止所有节点..."; kill $LIVOX_PID $FASTLIO_PID $FASTLIO_3D_PID $RVIZ_2D_PID $RVIZ_3D_PID 2>/dev/null; exit' INT
+wait 

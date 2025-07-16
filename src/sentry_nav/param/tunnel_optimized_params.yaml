@@ -1,0 +1,61 @@
+# 隧道环境优化的move_base参数配置
+# 针对狭窄、长距离、直线为主的隧道环境进行优化
+# 这些参数会覆盖基础参数文件中的相应设置
+
+# ==================== 性能优化参数 ====================
+# 降低控制频率以解决性能问题
+controller_frequency: 10      # 从15Hz降低到10Hz
+controller_patience: 60.0     # 增加耐心值
+
+# ==================== 局部规划器参数 (DWA) ====================
+# 隧道环境优化的DWA参数
+DWAPlannerROS:
+  # 目标容差 - 隧道环境可以更宽松
+  xy_goal_tolerance: 0.3      # 增加XY容差
+  yaw_goal_tolerance: 0.1     # 增加角度容差
+  
+  # 前向模拟参数 - 针对隧道优化，降低计算复杂度
+  sim_time: 1.5               # 从2.0降低到1.5，减少计算量
+  sim_granularity: 0.1        # 从0.05增加到0.1，降低精度提高性能
+  
+  # 评分参数 - 隧道环境优化
+  goal_distance_bias: 32.0    # 增加目标距离权重
+  path_distance_bias: 1.0     # 路径距离权重
+  occdist_scale: 0.02         # 障碍物距离权重
+  
+  # 速度和加速度限制 - 隧道环境优化
+  max_trans_vel: 1.0          # 隧道环境最大速度
+  min_trans_vel: 0.2          # 隧道环境最小速度
+  max_vel_x: 1.0
+  min_vel_x: -1.0
+  max_vel_y: 1.0
+  min_vel_y: -1.0
+  max_rot_vel: 1.0            # 隧道环境角速度
+  min_rot_vel: 0.2
+  
+  # 振荡检测和恢复
+  oscillation_reset_dist: 0.2 # 增加振荡重置距离
+  oscillation_reset_angle: 0.3 # 增加振荡重置角度
+
+# ==================== 全局规划器参数 ====================
+GlobalPlanner:
+  allow_unknown: false        # 隧道环境不允许未知区域
+  default_tolerance: 0.3      # 增加容差
+  cost_factor: 2.0            # 降低代价因子，使路径更平滑
+
+# ==================== 代价地图参数 ====================
+# 机器人几何参数
+robot_radius: 0.25            # 增加机器人半径，更保守
+
+# 传感器参数
+obstacle_range: 4.0           # 增加障碍物检测范围
+raytrace_range: 4.0           # 增加光线追踪范围
+
+# 膨胀参数
+inflation_radius: 0.3         # 增加膨胀半径
+cost_scaling_factor: 1.5      # 降低代价缩放因子，使膨胀更明显
+
+# ==================== 恢复行为参数 ====================
+recovery_behavior_enabled: true
+clearing_rotation_allowed: false  # 隧道环境禁用原地旋转
+conservative_reset_dist: 3.0      # 保守重置距离

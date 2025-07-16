@@ -71,7 +71,7 @@ roslaunch fast_lio_localization sentry_localize.launch
 ### 4. 启动导航系统
 
 ```bash
-roslaunch sentry_nav sentry_movebase.launch
+roslaunch sentry_nav sentry_movebase_tunnel.launch
 ```
 
 ## 项目结构

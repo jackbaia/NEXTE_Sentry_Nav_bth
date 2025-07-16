@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- MAVLink兼容的位置控制器 -->
+  <!-- 提供坐标系转换、标准化频率和MAVLink兼容字段 -->
+  
+  <!-- 启动MAVLink位置控制器 -->
+  <node name="mavlink_position_controller" pkg="nav_converter" type="mavlink_position_controller" output="screen">
+    <!-- 加载MAVLink兼容参数 -->
+    <rosparam file="$(find nav_converter)/param/mavlink_controller_params.yaml" command="load" />
+    
+    <!-- 话题重映射 -->
+    <remap from="global_path" to="/move_base1/NavfnROS/plan" />
+    <remap from="odom" to="/Odometry" />
+    <remap from="cmd_vel" to="/cmd_vel" />
+    <remap from="position_cmd" to="/mavlink_position_cmd" />
+    <remap from="current_path" to="/mavlink/current_path" />
+    <remap from="debug_info" to="/mavlink/debug_info" />
+  </node>
+  
+  <!-- 启动坐标系转换节点（可选） -->
+  <node name="coordinate_transformer" pkg="nav_converter" type="coordinate_transformer" output="screen" if="$(arg enable_coordinate_transform)">
+    <remap from="input_position_cmd" to="/mavlink_position_cmd" />
+    <remap from="output_position_cmd" to="/position_cmd" />
+    <param name="input_frame" value="$(arg input_frame)" />
+    <param name="output_frame" value="$(arg output_frame)" />
+  </node>
+  
+  <!-- 启动频率监控节点 -->
+  <node name="frequency_monitor" pkg="topic_tools" type="throttle" output="screen">
+    <remap from="input" to="/mavlink_position_cmd" />
+    <remap from="output" to="/position_cmd_throttled" />
+    <param name="rate" value="50" />
+  </node>
+  
+</launch> 

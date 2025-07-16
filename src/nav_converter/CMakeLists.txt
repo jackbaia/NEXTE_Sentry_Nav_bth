@@ -20,6 +20,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   PositionCommand.msg
+  MavlinkPositionCommand.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -74,12 +75,16 @@ add_executable(cmd_vel_to_position src/cmd_vel_to_position.cpp)
 add_executable(path_following_controller src/path_following_controller.cpp)
 add_executable(advanced_path_controller src/advanced_path_controller.cpp)
 add_executable(tunnel_path_controller src/tunnel_path_controller.cpp)
+add_executable(mavlink_position_controller src/mavlink_position_controller.cpp)
+add_executable(coordinate_transformer src/coordinate_transformer.cpp)
 
 ## Add cmake target dependencies of the executable
 add_dependencies(cmd_vel_to_position ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp)
 add_dependencies(path_following_controller ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp)
 add_dependencies(advanced_path_controller ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp)
 add_dependencies(tunnel_path_controller ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp)
+add_dependencies(mavlink_position_controller ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp)
+add_dependencies(coordinate_transformer ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(cmd_vel_to_position
@@ -94,13 +99,19 @@ target_link_libraries(advanced_path_controller
 target_link_libraries(tunnel_path_controller
   ${catkin_LIBRARIES}
 )
+target_link_libraries(mavlink_position_controller
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(coordinate_transformer
+  ${catkin_LIBRARIES}
+)
 
 #############
 ## Install ##
 #############
 
 ## Mark executables for installation
-install(TARGETS cmd_vel_to_position path_following_controller advanced_path_controller tunnel_path_controller
+install(TARGETS cmd_vel_to_position path_following_controller advanced_path_controller tunnel_path_controller mavlink_position_controller coordinate_transformer
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
@@ -109,8 +120,10 @@ install(FILES
   launch/nav_converter.launch
   launch/path_following_controller.launch
   launch/tunnel_path_controller.launch
+  launch/mavlink_position_controller.launch
   param/converter_params.yaml
   param/tunnel_controller_params.yaml
+  param/mavlink_controller_params.yaml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 

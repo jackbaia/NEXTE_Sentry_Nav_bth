@@ -47,13 +47,13 @@ roslaunch nav_converter path_following_controller.launch
 
 ### 3. 启动高级控制器
 ```bash
-roslaunch nav_converter advanced_path_controller.launch
+roslaunch nav_converter tunnel_path_controller.launch
 ```
 
 ### 4. 与move_base集成
 确保move_base正在运行并发布路径规划结果：
 ```bash
-roslaunch sentry_nav sentry_movebase.launch
+roslaunch sentry_nav sentry_movebase_tunnel.launch
 ```
 
 ## 参数配置

@@ -87,3 +87,10 @@ catkin_package(
 add_executable(fastlio_mapping1 src/laserMapping.cpp include/ikd-Tree/ikd_Tree.cpp src/preprocess.cpp)
 target_link_libraries(fastlio_mapping1 ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${PYTHON_LIBRARIES})
 target_include_directories(fastlio_mapping1 PRIVATE ${PYTHON_INCLUDE_DIRS})
+
+# Install Python scripts
+install(DIRECTORY scripts/
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+  FILES_MATCHING PATTERN "*.py"
+  PATTERN "__pycache__" EXCLUDE
+)

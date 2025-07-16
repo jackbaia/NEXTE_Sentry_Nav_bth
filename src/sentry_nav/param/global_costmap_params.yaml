@@ -8,3 +8,14 @@ global_costmap:
   transform_tolerance: 2 #等待坐标变换发布信息的超时时间
  
   static_map: true # 是否使用一个地图或者地图服务器来初始化全局代价地图，如果不使用静态地图，这个参数为false.
+  
+  # 添加分辨率参数 - 解决折线问题的关键
+  resolution: 0.05  # 提高分辨率，减少折线现象
+  
+  # 添加地图尺寸参数
+  width: 100.0      # 地图宽度
+  height: 100.0     # 地图高度
+  
+  # 添加原点参数
+  origin_x: -50.0   # 地图原点X坐标
+  origin_y: -50.0   # 地图原点Y坐标

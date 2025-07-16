@@ -8,7 +8,8 @@ GlobalPlanner:
   old_navfn_behavior: false #默认false，是否复制navfn规划器的结果
   lethal_cost: 253 #默认253，致命代价值
   neutral_cost: 50 #默认50，中等代价值
-  cost_factor: 3.0 #默认3.0，代价因子
+  cost_factor: 2.0 #降低代价因子，使路径更平滑，减少折线
   publish_potential: true #默认true，是否发布costmap的势函数
   orientation_mode: 0 #默认0，设置点的方向
   orientation_window_size: 1 #默认1，根据orientation_mode指定的位置积分确定窗口方向
+  planner_patience: 60.0  # 全局规划器耐心值，设置为1分钟

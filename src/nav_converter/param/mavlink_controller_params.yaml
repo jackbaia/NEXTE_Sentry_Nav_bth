@@ -1,0 +1,46 @@
+# MAVLink兼容位置控制器参数配置
+
+# 基础控制参数
+lookahead_distance: 2.0          # 前瞻距离 (米)
+waypoint_tolerance: 0.5          # 路径点容差 (米)
+max_velocity: 5.0                # 最大速度 (米/秒)
+max_acceleration: 3.0            # 最大加速度 (米/秒²)
+max_jerk: 10.0                   # 最大加加速度 (米/秒³)
+control_frequency: 50.0          # 控制频率 (Hz) - 标准化为50Hz
+fixed_height: 1.5                # 固定飞行高度 (米)
+
+# 控制增益
+yaw_gain: 1.0                    # 偏航控制增益
+position_gain: 1.0               # 位置控制增益
+velocity_gain: 0.5               # 速度控制增益
+
+# 坐标系设置
+use_ned_frame: false             # 是否使用NED坐标系 (true=NED, false=ENU)
+enable_coordinate_transform: true # 是否启用坐标系转换
+output_frame_id: "map"           # 输出坐标系ID
+
+# 安全参数
+emergency_stop_timeout: 1.0      # 紧急停止超时 (秒)
+max_path_age: 5.0                # 最大路径年龄 (秒)
+
+# MAVLink兼容参数
+coordinate_frame: 1              # 坐标系类型 (1=LOCAL_NED, 2=LOCAL_ENU)
+type_mask: 0                     # 位置目标类型掩码 (0=使用所有字段)
+target_system: 1                 # 目标系统ID
+target_component: 1              # 目标组件ID
+
+# 有效性标志
+position_valid: true             # 位置有效性
+velocity_valid: true             # 速度有效性
+acceleration_valid: true         # 加速度有效性
+yaw_valid: true                  # 偏航角有效性
+yaw_rate_valid: true             # 偏航角速度有效性
+
+# 频率标准化参数
+standard_control_frequency: 50.0 # 标准控制频率 (Hz)
+frequency_tolerance: 0.1         # 频率容差 (Hz)
+
+# 安全限制
+max_yaw_rate: 2.0                # 最大偏航角速度 (弧度/秒)
+max_position_error: 10.0         # 最大位置误差 (米)
+max_velocity_error: 5.0          # 最大速度误差 (米/秒) 

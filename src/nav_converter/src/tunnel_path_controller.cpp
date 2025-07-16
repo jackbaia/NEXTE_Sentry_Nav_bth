@@ -236,6 +236,9 @@ private:
     ros::Subscriber odom_sub_;
     ros::Subscriber cmd_vel_sub_;
     ros::Subscriber laser_sub_;
+    ros::Subscriber tunnel_path_sub_;      // 自定义隧道路径
+    ros::Subscriber move_base_path_sub_;   // move_base路径
+    ros::Subscriber planner_status_sub_;   // 规划器状态
     
     // 发布者
     ros::Publisher position_cmd_pub_;
@@ -250,9 +253,13 @@ private:
     // 路径数据
     std::deque<geometry_msgs::PoseStamped> original_path_;
     std::deque<geometry_msgs::PoseStamped> smoothed_path_;
+    std::deque<geometry_msgs::PoseStamped> tunnel_path_;      // 自定义隧道路径
+    std::deque<geometry_msgs::PoseStamped> move_base_path_;   // move_base路径
     bool path_received_;
     bool path_active_;
     size_t current_waypoint_index_;
+    bool use_custom_planner_;     // 是否使用自定义规划器
+    std::string planner_status_;  // 规划器状态
     
     // 当前状态
     Eigen::Vector3d current_position_;
@@ -338,7 +345,9 @@ public:
         tunnel_width_estimate_(2.0),
         lateral_safety_margin_(0.3),
         vertical_safety_margin_(0.2),
-        enable_tunnel_centering_(true) {
+        enable_tunnel_centering_(true),
+        use_custom_planner_(true),
+        planner_status_("idle") {
         
         loadTunnelParameters();
         
@@ -347,6 +356,11 @@ public:
         odom_sub_ = nh_.subscribe("odom", 10, &TunnelPathController::odomCallback, this);
         cmd_vel_sub_ = nh_.subscribe("cmd_vel", 10, &TunnelPathController::cmdVelCallback, this);
         laser_sub_ = nh_.subscribe("laser_scan", 10, &TunnelPathController::laserCallback, this);
+        
+        // 增强版规划器集成订阅者
+        tunnel_path_sub_ = nh_.subscribe("/tunnel_path", 10, &TunnelPathController::tunnelPathCallback, this);
+        move_base_path_sub_ = nh_.subscribe("/move_base/NavfnROS/plan", 10, &TunnelPathController::moveBasePathCallback, this);
+        planner_status_sub_ = nh_.subscribe("/tunnel_planner_status", 10, &TunnelPathController::plannerStatusCallback, this);
         
         // 初始化发布者
         position_cmd_pub_ = nh_.advertise<nav_converter::PositionCommand>("cmd", 10);
@@ -766,6 +780,57 @@ private:
         while (angle > M_PI) angle -= 2.0 * M_PI;
         while (angle < -M_PI) angle += 2.0 * M_PI;
         return angle;
+    }
+    
+    void tunnelPathCallback(const nav_msgs::Path::ConstPtr& msg) {
+        // 处理自定义隧道路径
+        tunnel_path_.clear();
+        for (const auto& pose : msg->poses) {
+            tunnel_path_.push_back(pose);
+        }
+        
+        // 如果启用自定义规划器，使用隧道路径
+        if (use_custom_planner_ && !tunnel_path_.empty()) {
+            original_path_ = tunnel_path_;
+            path_received_ = true;
+            path_active_ = true;
+            current_waypoint_index_ = 0;
+            last_path_time_ = ros::Time::now();
+            
+            ROS_INFO("Received tunnel path with %zu waypoints", tunnel_path_.size());
+        }
+    }
+    
+    void moveBasePathCallback(const nav_msgs::Path::ConstPtr& msg) {
+        // 处理move_base路径
+        move_base_path_.clear();
+        for (const auto& pose : msg->poses) {
+            move_base_path_.push_back(pose);
+        }
+        
+        // 如果自定义规划器失败，使用move_base路径
+        if (!use_custom_planner_ && !move_base_path_.empty()) {
+            original_path_ = move_base_path_;
+            path_received_ = true;
+            path_active_ = true;
+            current_waypoint_index_ = 0;
+            last_path_time_ = ros::Time::now();
+            
+            ROS_INFO("Using move_base path with %zu waypoints", move_base_path_.size());
+        }
+    }
+    
+    void plannerStatusCallback(const std_msgs::Header::ConstPtr& msg) {
+        // 处理规划器状态
+        planner_status_ = msg->frame_id;
+        
+        // 根据状态决定使用哪个规划器
+        if (planner_status_ == "error" || planner_status_ == "avoiding") {
+            use_custom_planner_ = false;
+            ROS_WARN("Switching to move_base planner due to custom planner status: %s", planner_status_.c_str());
+        } else if (planner_status_ == "following" || planner_status_ == "planning") {
+            use_custom_planner_ = true;
+        }
     }
 };
 
