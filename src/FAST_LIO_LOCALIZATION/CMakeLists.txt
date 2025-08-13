@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(fast_lio_localization)
 
 SET(CMAKE_BUILD_TYPE "Debug")
@@ -87,6 +87,7 @@ catkin_package(
 add_executable(fastlio_mapping1 src/laserMapping.cpp include/ikd-Tree/ikd_Tree.cpp src/preprocess.cpp)
 target_link_libraries(fastlio_mapping1 ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${PYTHON_LIBRARIES})
 target_include_directories(fastlio_mapping1 PRIVATE ${PYTHON_INCLUDE_DIRS})
+add_dependencies(fastlio_mapping1 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 # Install Python scripts
 install(DIRECTORY scripts/
