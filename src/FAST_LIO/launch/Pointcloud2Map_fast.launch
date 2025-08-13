@@ -1,0 +1,18 @@
+<launch>
+    <node pkg="octomap_server" type = "octomap_server_node" name="octomap_server">
+
+        <param name ="resolution" value="0.3" />  <!-- 快速建图：0.3米分辨率 -->
+        <param name = "frame_id" type="str" value="robot_foot_init" />
+        <param name = "sensor_model/max_range" value="50.0" />  <!-- 减少探测范围 -->
+        <param name = "latch" value="false" />  <!-- 关闭latch以节省内存 -->
+        <param name = "pointcloud_max_z" value="2" />
+        <param name = "pointcloud_min_z" value="-0.5" />
+        
+        <!-- 快速建图优化参数 -->
+        <param name = "base_scan_time" value="0.1" />  <!-- 增加扫描间隔 -->
+        <param name = "max_sensor_range" value="50.0" />
+        <param name = "minimum_time_between_updates" value="0.2" />  <!-- 增加更新间隔 -->
+
+        <remap from ="cloud_in" to="/cloud_registered" />
+    </node>
+</launch> 
